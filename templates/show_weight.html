@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Show Weights
+{% endblock %}
+
+{% block main %}
+
+<table class="table" style="width:100%" id="weights_table">
+    <thead>
+        <tr>
+            <th class="sorting">Date</th>
+            <th class="sorting">Weight</th>
+    </thead>
+    <tbody>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row["time_stamp"] }}</td>
+            <td>{{ row["weight"] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $('#weights_table').DataTable();
+    });
+</script>
+
+{% endblock %}

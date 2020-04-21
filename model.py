@@ -57,3 +57,22 @@ def register_user(username, hash):
         print(Error)
     finally:
         con.close()
+
+
+def add_weight(user_id, weight):
+    try:
+        con = sqlite3.connect("wtracker.db")
+        cursorObj = con.cursor()
+        sql_str = "INSERT INTO weights(user_id, weight) VALUES (:user_id, :weight)"
+
+        cursorObj.execute(sql_str, {"user_id": user_id, "weight": weight})
+        con.commit()
+    except Error:
+        print(Error)
+    finally:
+        con.close()
+
+
+if __name__ == "__main__":
+    rows = get_weight(2)
+    weights = [row["weight"] for row in rows]

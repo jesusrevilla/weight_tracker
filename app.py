@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import Flask, flash, jsonify, redirect, render_template, request, session
 from flask_session import Session
@@ -7,7 +8,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required, lookup, usd
-from model import get_user, register_user, get_weight
+from model import get_user, register_user, get_weight, add_weight
 
 # Configure application
 app = Flask(__name__)
@@ -37,21 +38,34 @@ def index():
     """Show weight records"""
     # Get reorded weights using user_id
     rows = get_weight(session["user_id"])
-    return render_template("show_weight.html", rows)
+    return render_template("show_weight.html", rows=rows)
 
 
 @app.route("/add", methods=["GET", "POST"])
 @login_required
-def buy():
-    """Buy shares of stock"""
-    return apology("TODO")
+def add():
+
+    if request.method == "POST":
+        """Add Weight"""
+        # Add weight
+        weight = request.form.get("weight")
+        add_weight(session["user_id"], weight)
+        return redirect("/")
+
+    else:
+        return render_template("add_weight.html")
 
 
-@app.route("/history")
+@app.route("/plot")
 @login_required
-def history():
-    """Show history of transactions"""
-    return apology("TODO")
+def plot():
+    """Plot weight"""
+    rows = get_weight(session["user_id"])
+    weights = [row["weight"] for row in rows]
+    dates = [row["time_stamp"] for row in rows]
+    return render_template(
+        "plot_weights.html", weights=weights, dates=json.dumps(dates)
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -104,13 +118,6 @@ def logout():
     return redirect("/")
 
 
-@app.route("/profile", methods=["GET", "POST"])
-@login_required
-def quote():
-    """Get stock quote."""
-    return apology("TODO")
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
@@ -152,13 +159,6 @@ def register():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
-
-
-@app.route("/remove", methods=["GET", "POST"])
-@login_required
-def sell():
-    """Sell shares of stock"""
-    return apology("TODO")
 
 
 def errorhandler(e):

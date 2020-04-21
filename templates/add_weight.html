@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Add Weight
+{% endblock %}
+
+{% block main %}
+<form action="/add" method="POST">
+    <div class="form-group">
+        <input autocomplete="off" class="form-control" type="number" step="0.1" name="weight" class="" autofocus
+            placeholder="Weight in Kilograms">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Weight</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Plot Weight
+{% endblock %}
+
+{% block main %}
+
+
+
+<canvas id="weight_chart" width="150" height="100"></canvas>
+
+<script>
+    var weights = {{ weights|tojson }};
+    var dates = JSON.parse({{ dates|tojson }});
+    var ctx = document.getElementById("weight_chart");
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [
+                {
+					label: 'Weight Chart',
+                    data: weights,
+					borderColor: 'rgb(54, 162, 235)',
+					backgroundColor: 'rgba(53, 53, 190, 0.05)',
+                }
+            ]
+        },
+		
+		options : {
+			scales: {
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+							labelString: 'Weight (Kg)'
+					}
+				}],
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+							labelString: 'Time Stamp'
+					}
+				}],
+			}	
+		}			
+    });
+
+</script>
+
+
+{% endblock %}
